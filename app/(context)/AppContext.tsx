@@ -10,7 +10,8 @@ type AppContextType = {
   subtotal: number,
   totalAmount: number,
   setSubtotal: (subtotal: number) => void,
-  setTotalAmount: (totalAmount: number) => void
+  setTotalAmount: (totalAmount: number) => void,
+  currency: string
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined)
@@ -19,7 +20,7 @@ const AppContextProvider = ({children} : {children: React.ReactNode}) => {
   const [products, setProducts] = useState<Product[]>([])
   const [subtotal, setSubtotal] = useState(0)
   const [totalAmount, setTotalAmount] = useState(0)
-
+  
 
   useEffect(() => {
     try{
@@ -29,8 +30,8 @@ const AppContextProvider = ({children} : {children: React.ReactNode}) => {
     }
   }, [])
 
-  const value: AppContextType = {products, subtotal, totalAmount, setSubtotal, setTotalAmount }
-  console.log("Products in context:", products) // Debugging log
+  const value: AppContextType = {products, subtotal, totalAmount, setSubtotal, setTotalAmount, currency} 
+ 
   return (
     <AppContext.Provider value={value}>
       {children}

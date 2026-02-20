@@ -5,28 +5,13 @@ import { Button } from '@/components/ui/button'
 import { ArrowRight, Zap, Package, Truck, Shield, Heart, ShoppingCart } from 'lucide-react'
 import { useAppContext } from '../(context)/AppContext';
 import { Product } from '@/types/categories'
+import ProductsList from './ProductsList';
 
 const NewArrials = () => {
-  const [activeTab, setActiveTab] = useState(0)
+  
   const [displayProducts, setDisplayProducts] = useState<Product[]>([])
 
-  const { products } = useAppContext()
-
-  useEffect(() => {
-    console.log("Products in NewArrials component:", products) // Debugging log
-  }, [products])
-
-
-
-  
-
-  const handleCategoryClick = (categoryName: string) => {
-    const filtered = products.filter(p => 
-      p.category.some(cat => cat.toLowerCase().includes(categoryName.toLowerCase()))
-    )
-    setDisplayProducts(filtered.length > 0 ? filtered : products.slice(0, 6))
-  }
-
+ 
   const features = [
     {
       icon: Zap,
@@ -93,67 +78,8 @@ const NewArrials = () => {
         
 
         {/* Products Grid */}
-        {displayProducts.length > 0 && (
-          <div className="mb-16">
-            <h3 className="mb-8 text-2xl font-bold text-gray-900">Featured Products</h3>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {displayProducts.map((product) => (
-                <div
-                  key={product.id}
-                  className="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-300 hover:shadow-xl"
-                >
-                  {/* Image Container */}
-                  <div className="relative h-64 w-full overflow-hidden bg-gray-100 sm:h-72">
-                    <img
-                      src={product.image[0]}
-                      alt={product.name}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      onError={(e) => {
-                        e.currentTarget.src = "https://placehold.co/300x400?text=No+Image"
-                      }}
-                    />
-
-                    {/* Wishlist Button */}
-                    <button className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-md transition-all hover:bg-white hover:scale-110">
-                      <Heart className="h-5 w-5 text-gray-600 hover:text-red-500" />
-                    </button>
-
-                    {/* Overlay Actions */}
-                    <div className="absolute inset-0 flex items-end justify-center bg-black/0 transition-all duration-300 group-hover:bg-black/30">
-                      <div className="-translate-y-4 transform opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 pb-4">
-                        <Button size="lg" className="bg-white text-black hover:bg-gray-100 gap-2">
-                          <ShoppingCart className="h-4 w-4" />
-                          Add to Cart
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex flex-1 flex-col gap-3 p-4 sm:p-6">
-                    <p className="text-xs font-medium uppercase tracking-widest text-blue-600">
-                      {product.category[0]}
-                    </p>
-
-                    <h3 className="line-clamp-2 text-lg font-semibold text-gray-900 transition-colors group-hover:text-blue-600">
-                      {product.name}
-                    </h3>
-
-                    {/* Price */}
-                    <div className="flex items-baseline gap-2 mt-auto">
-                      <span className="text-2xl font-bold text-gray-900">
-                        ${product.offerPrice.toFixed(2)}
-                      </span>
-                      <span className="text-sm line-through text-gray-500">
-                        ${product.price.toFixed(2)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        
+       
 
 
         {/* Features */}
@@ -174,6 +100,10 @@ const NewArrials = () => {
           })}
         </div>
       </div>
+
+
+
+      <ProductsList/>
     </section>
   );
 };
