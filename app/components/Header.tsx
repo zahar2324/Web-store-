@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,9 +18,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { ChevronsDownUpIcon, Search, User } from "lucide-react";
-import { categories } from "@/data";
+import { useAppContext } from "../(context)/AppContext";
+//import { categories } from "@/data";
 const Header = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>("");
+  const {categories} = useAppContext()
+
+  useEffect(() => {
+    console.log("Categories in Header:", categories);
+  }, [categories]);
   return (
     <header className="max-padd-container">
       <div className="bg-secondary px-5 py-2 mt-2 w-full z-50 rounded-full"> 
@@ -54,6 +60,13 @@ const Header = () => {
                     <DropdownMenuLabel>Browse Categories</DropdownMenuLabel>
                     
                     <DropdownMenuSeparator />
+                    {
+                      categories.length === 0 && (
+                        <DropdownMenuItem>
+                          Loading...
+                        </DropdownMenuItem>
+                      )
+                    }
                     {categories.map((category) => (
                       <DropdownMenuItem
                         key={category.id}
@@ -62,10 +75,7 @@ const Header = () => {
                         {category.name}
                       </DropdownMenuItem>
                     ))}
-                    <DropdownMenuItem>
-                      Profile
-                      
-                    </DropdownMenuItem>
+                    
                    
                   </DropdownMenuGroup>
                   

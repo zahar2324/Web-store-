@@ -14,6 +14,7 @@ export default function ProductPage() {
 
   const [product, setProduct] = useState<Product | null>(null)
   const [quantity, setQuantity] = useState(1)
+  const [selectedImage, setSelectedImage] = useState(0)
 
   useEffect(() => {
     const found = products.find(p => p.id === parseInt(id))
@@ -55,10 +56,32 @@ export default function ProductPage() {
         <div className="grid gap-10 lg:grid-cols-[550px_1fr]">
           
           {/* image */}
-          <div>
-            <div className="relative aspect-square overflow-hidden rounded-2xl bg-gray-100">
+          <div className="flex flex-col-reverse lg:flex-row gap-4">
+             {/* Thumbnails list */}
+             <div className="flex lg:flex-col gap-4 overflow-x-auto lg:overflow-y-auto w-full lg:w-24 max-h-[500px] scrollbar-hide">
+              {product.images.map((img, index) => (
+                <button
+                  key={img.id}
+                  onClick={() => setSelectedImage(index)}
+                  className={`relative aspect-square w-20 lg:w-full flex-shrink-0 overflow-hidden rounded-xl border-2 transition-all ${
+                    selectedImage === index
+                      ? "border-black ring-1 ring-black/10 opacity-100"
+                      : "border-transparent opacity-60 hover:opacity-100 hover:border-gray-300"
+                  }`}
+                >
+                  <img
+                    src={process.env.NEXT_PUBLIC_API_URL + img.url}
+                    alt={`${product.name} ${index + 1}`}
+                    className="h-full w-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+
+            {/* Main Image */}
+            <div className="flex-1 relative aspect-square overflow-hidden rounded-2xl bg-gray-100">
               <img
-                src={product.image[0]}
+                src={process.env.NEXT_PUBLIC_API_URL + (product.images[selectedImage]?.url || product.images[0]?.url) || '/placeholder.png'}
                 alt={product.name}
                 className="h-full w-full object-cover"
               />
@@ -74,7 +97,7 @@ export default function ProductPage() {
           <div className="space-y-6">
             <div>
               <p className="text-xs uppercase tracking-widest text-gray-400">
-                {product.category[0]}
+                {product.categories && product.categories[0]?.name}
               </p>
               <h1 className="text-3xl font-bold text-gray-900 mt-2">
                 {product.name}

@@ -24,7 +24,7 @@ const ProductItem = ({ product }: { product: Product }) => {
       {/* Контейнер для фото */}
       <div className='relative overflow-hidden aspect-square bg-gray-50'>
         <Image 
-          src={product.image[0]} 
+          src={process.env.NEXT_PUBLIC_API_URL + product.images[0]?.url || '/placeholder.png'} 
           alt={product.name} 
           width={400} 
           height={400}
@@ -41,7 +41,7 @@ const ProductItem = ({ product }: { product: Product }) => {
       {/* Інформація про товар */}
       <div className='p-4 flex flex-col flex-grow'>
         <p className='text-xs text-gray-400 uppercase tracking-wider mb-1'>
-          {product.category[0]}
+          {product.categories && product.categories[0]?.name}
         </p>
         
         <h5 className='text-gray-800 font-semibold text-lg line-clamp-1 mb-2'>

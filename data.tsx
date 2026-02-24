@@ -1,15 +1,6 @@
 import { Category, Product } from "./types/categories";
 
-export const categories: Category[] = [
-  { id: 1, name: "Headphones" },
-  { id: 2, name: "Cameras" },
-  { id: 3, name: "Mobiles" },
-  { id: 4, name: "Accessories" },
-  { id: 5, name: "Speakers" },
-  { id: 6, name: "Watches" },
-  { id: 7, name: "Monitors" }
-];
-
+/*
 export const Products: Product[] = [
   {
     id: 1,
@@ -132,3 +123,4 @@ export const Products: Product[] = [
     popular: true
   }
 ];
+*/
