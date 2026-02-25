@@ -26,4 +26,6 @@ export type Product = {
     date: string;
     popular: boolean;
     slug: string;
+
+    category: string;
 }

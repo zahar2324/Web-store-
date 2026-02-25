@@ -14,7 +14,11 @@ type AppContextType = {
   setSubtotal: (subtotal: number) => void,
   setTotalAmount: (totalAmount: number) => void,
   currency: string,
-  categories: Category[]
+  categories: Category[],
+  searchQuery: string,
+  setSearchQuery: (searchQuery: string) => void,
+  selectedCategory: string | null,
+  setSelectedCategory: (selectedCategory: string | null) => void
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined)
@@ -24,6 +28,9 @@ const AppContextProvider = ({children} : {children: React.ReactNode}) => {
   const [subtotal, setSubtotal] = useState(0)
   const [totalAmount, setTotalAmount] = useState(0)
   
+
+  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
   const [categories, setCategories] = useState<Category[]>([])
 
@@ -60,15 +67,19 @@ const getProducts = async () => {
     getProducts()
   }, [])
 
-  const value = {
+  const value = React.useMemo(() => ({
     products, 
     subtotal, 
     totalAmount, 
-    setSubtotal: (value: number) => setSubtotal(value), 
-    setTotalAmount: (value: number) => setTotalAmount(value), 
+    setSubtotal, 
+    setTotalAmount, 
     currency, 
-    categories
-  }
+    categories,
+    searchQuery,
+    setSearchQuery,
+    selectedCategory,
+    setSelectedCategory
+  }), [products, subtotal, totalAmount, categories, searchQuery, selectedCategory])
  
   return (
     <AppContext.Provider value={value}>

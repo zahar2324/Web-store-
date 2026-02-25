@@ -7,6 +7,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import { Button } from "@/components/ui/button"
+import  Link  from 'next/link'
 const Hero = () => {
     const slides = [
         {
@@ -52,9 +53,12 @@ const Hero = () => {
                       {slide.description}
                     </p>
                     <div className="flex flex-wrap gap-3">
-                      <Button size="lg" className="bg-white text-black hover:bg-white/90 cursor-pointer">
-                        Shop now
-                      </Button>
+                      <Link href='/categories'>
+                        <button className='bg-white text-black px-6 py-3 rounded-full font-semibold hover:bg-gray-200 cursor-pointer'>
+                          Shop now
+                        </button>
+                      </Link>
+                      
                       <Button
                         size="lg"
                         variant="outline"

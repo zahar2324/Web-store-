@@ -6,6 +6,7 @@ import { useAppContext } from "@/app/(context)/AppContext"
 import { Product } from "@/types/categories"
 import { ArrowLeft, Heart, Share2 } from "lucide-react"
 import Link from "next/link"
+import ProductItem from "@/app/components/ProductItem"
 
 export default function ProductPage() {
   const params = useParams()
@@ -15,10 +16,25 @@ export default function ProductPage() {
   const [product, setProduct] = useState<Product | null>(null)
   const [quantity, setQuantity] = useState(1)
   const [selectedImage, setSelectedImage] = useState(0)
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([])
+  const [loadingRelated, setLoadingRelated] = useState(true)
 
   useEffect(() => {
-    const found = products.find(p => p.id === parseInt(id))
-    if (found) setProduct(found)
+    setLoadingRelated(true)
+    if (products.length > 0) {
+      const found = products.find(p => p.id === parseInt(id))
+      
+      if (found) {
+        setProduct(found)
+        // Find related products (same category, different ID)
+        const related = products.filter(p => 
+          p.id !== found.id && 
+          p.categories.some(c => found.categories.some(fc => fc.id === c.id))
+        ).slice(0, 4)
+        setRelatedProducts(related)
+      }
+      setLoadingRelated(false)
+    }
   }, [id, products])
 
   if (!product) {
@@ -147,6 +163,30 @@ export default function ProductPage() {
               </button>
             </div>
           </div>
+        </div>
+
+        <div className="mt-16 border-t pt-10">
+          <h2 className="text-2xl font-bold mb-6">You May Also Like</h2>
+          
+          {loadingRelated ? (
+             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-pulse">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="h-64 bg-gray-200 rounded-lg"></div>
+                ))}
+             </div>
+          ) : relatedProducts.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {relatedProducts.map((p) => (
+                <div key={p.id} className="transform transition duration-300 hover:scale-105">
+                  <ProductItem product={p} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-gray-500 text-center py-10">
+              No related products found at the moment.
+            </div>
+          )}
         </div>
       </div>
     </div>

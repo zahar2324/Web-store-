@@ -19,10 +19,27 @@ import {
 import { Button } from "@/components/ui/button";
 import { ChevronsDownUpIcon, Search, User } from "lucide-react";
 import { useAppContext } from "../(context)/AppContext";
+import { useRouter } from "next/navigation";
 //import { categories } from "@/data";
 const Header = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>("");
-  const {categories} = useAppContext()
+  //const [selectedCategory, setSelectedCategory] = useState<string | null>("");
+  const {categories, setSearchQuery, setSelectedCategory,selectedCategory} = useAppContext()
+  const [searchInput, setSearchInput] = useState("")
+  const router = useRouter()
+
+  const handleCategorySelect = (categoryName: string | null) => {
+    setSelectedCategory(categoryName);
+    const url = categoryName ? `/categories?category=${encodeURIComponent(categoryName)}` : '/categories';
+    router.push(url);
+  }
+
+  //update search query in context when searchInput changes
+  useEffect(() => {
+    setSearchQuery(searchInput);
+    const url = searchInput ? `/categories?search=${encodeURIComponent(searchInput)}` : '/categories';
+    searchInput != "" && router.push(url);
+  }, [searchInput, setSearchQuery, router]);
+
 
   useEffect(() => {
     console.log("Categories in Header:", categories);
@@ -46,7 +63,7 @@ const Header = () => {
           {/* searchbar */}
           <div className="flex-2 lg:flex-1 relative hidden md:flex items-center"> 
             <div className="flex bg-wight w-full max-w-[566px] pl-6 ring-1 ring-slate-900/5 rounded-full overflow-hidden items-center">
-              <input className="w-full text-sm outline-none pr-10 placeholder:text-gray-400" type="text" placeholder="Type to search..." />
+              <input value={searchInput} onChange={(e) => setSearchInput(e.target.value)} className="w-full text-sm outline-none pr-10 placeholder:text-gray-400" type="text" placeholder="Type to search..." />
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild className="flexCenter gap-1 px-2 border-x-2 border-slate-900/10 cursor-pointer font-semibold text-sm text-gray-500 outline-none">
@@ -70,7 +87,7 @@ const Header = () => {
                     {categories.map((category) => (
                       <DropdownMenuItem
                         key={category.id}
-                        onSelect={() => setSelectedCategory(category.name)}
+                        onClick={() => handleCategorySelect(category.name)}
                       >
                         {category.name}
                       </DropdownMenuItem>
